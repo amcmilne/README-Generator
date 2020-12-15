@@ -17,85 +17,97 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const util = require('util');
+//const badges = require('badges');
 const generateMarkdown = require('./generateMarkdown');
 
+
 const writeFileAsync = util.promisify(fs.writeFile);
+
+const installationChoices = ['npm init', 'npm install inquirer', 'other'];
+const licenseChoices = ['Mozilla Public License 2.0', 'Apache License 2.0', 'MIT License', 'Unlicensed'];
+
 
 // array of questions for user
 // Description, Table of Contents, Installation, Usage, License, Contributing, Tests, and Questions
 
 const userQuestions = () =>
-inquirer.prompt([
-{
-    type: 'input',
-    message: "What is the title of your project?",
-    name: 'title',
-    default: "Project Title",
-},
-{
-    type: 'input',
-    message: "Please describe your project.",
-    name: 'description',
-},
-{
-    type: 'input',
-    message: "Please list instruction for installations required.",
-    name: 'installations',
-},
-{
-    type: 'input',
-    message: "Please list instructions for use and purpose of your project use.",
-    name: 'usage',
-},
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: "What is the title of your project?",
+            name: 'title',
+            default: "Project Title",
+        },
+        {
+            type: 'input',
+            message: "Please describe your project.",
+            name: 'description',
+        },
+        {
+            type: 'checkbox',
+            message: "Please list installations required.",
+            choices: installationChoices,
+            name: 'installations',
+        },
+        {
+            type: 'input',
+            message: "Please instruction user how to run your program.",
+            name: 'usage',
+        },
 
-{
-    type: 'input',
-    message: "Please list instruction for others interested in contributing to this project.",
-    name: 'contributing',
-},
-{
-    type: 'input',
-    message: "Please give instructions for testing, if applicable, and how to run.",
-    name: 'testing',
-},
-{
-    type: 'input',
-    message: "Please select license used.",
-    name: 'license',
-},
-{   
-    type: 'input',
-    message: "What is your GitHub username?",
-     name: 'username',
-},
-{   
-    type: 'input',
-    message: "What is your email address?",
-     name: 'email',
-}
-]);
+        {
+            type: 'input',
+            message: "Please list instruction for others interested in contributing to this project.",
+            name: 'contributing',
+        },
+        {
+            type: 'input',
+            message: "Please give instructions for testing, if applicable, and how to run.",
+            name: 'testing',
+        },
+        {
+            type: 'list',
+            message: "Please select license used.",
+            choices: licenseChoices,
+            name: 'license',
+        },
+        {
+            type: 'input',
+            message: "What is your GitHub username?",
+            name: 'username',
+        },
+        {
+            type: 'input',
+            message: "What is your email address?",
+            name: 'email',
+        }
+    ]);
+
 
 
 
 // function to write README file
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, err => {
-        if (err) {
-          return console.log(err);
-        }      
-        console.log("Your README.md file has been created")
-    });
-};  
+// function writeToFile(fileName, data) {
+//     fs.writeFile(fileName, data, err => {
+//         if (err) {
+//           return console.log(err);
+//         }      
+//         console.log("Your README.md file has been created")
+//     });
+// };  
 
 // function to initialize program
 function init() {
-userQuestions()
-  .then((answers) => writeFileAsync('READMETEST.md', generateMarkdown(answers)))
-  .then(() => console.log('Generatied your markdown file.'))
-  .catch((err) => console.error(err))};
+    userQuestions()
+        .then((answers) => writeFileAsync('READMETEST.md', generateMarkdown(answers)))
+        .then(() => console.log('Generated your markdown file.'))
+        .catch((err) => console.error(err))
+};
 
+
+init();
 
 // function call to initialize program
-init();
+//init();
 
 
